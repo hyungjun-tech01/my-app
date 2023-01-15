@@ -26,7 +26,6 @@ interface CircleProps {
 // ?? : default 로 주는 값 : 이게 있어야 optional 시 에러가 안남 . 
 // aa = "  " : default 줄 때  
 function Circle({bgColor, borderColor, text="default text"}:CircleProps) {
-    console.log(borderColor);
     return (
         <Container bgColor={bgColor} borderColor={borderColor?? bgColor}>{text}</Container>
     )
