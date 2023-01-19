@@ -46,6 +46,16 @@ const Coin = styled.li`
     border-radius : 10px;
     margin-bottom : 10px;
     padding : 20px;
+    a {
+        transition : color 0.4s ease-in;
+        display : block ; // 기존에는 화살표 까지만 클릭이 가능하였으나, 전체 블록을 클릭 가능
+        padding : 20px; // 블록안으로 20pixel 안에서 부터 클릭 가능 
+    }
+    &:hover {
+        a{
+            color : ${props=>props.theme.accentColor}
+        }
+    }
 `;
 const Title = styled.h1`
     font-size : 48px;

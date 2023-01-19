@@ -48,6 +48,7 @@ body {
 // a tag에 밑줄 하지 않게 
 a {
   text-decoration : none;
+  color : inherit;
 }
 menu, ol, ul {
   list-style: none;
