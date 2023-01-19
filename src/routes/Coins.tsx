@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
+import {useState, useEffect} from "react";
 
 const coins = [ 
     {
@@ -30,8 +31,19 @@ const coins = [
         type: "token",
         },
     ]
+interface CoinInterface { 
+    id: string,
+    name: string,
+    symbol: string,
+    rank: number,
+    is_new: boolean,
+    is_active: boolean,
+    type: string,
+}    
 const Container = styled.div`
-    padding : 0px 20px 
+    padding : 0px 20px ;
+    max-width : 480px;
+    margin : 0;
 `;
 const Header = styled.header`
     height : 10vh;
@@ -61,10 +73,30 @@ const Title = styled.h1`
     font-size : 48px;
     color: ${props=>props.theme.accentColor}
 `;
-
-
+interface CoinInterface {
+    id: string,
+    name: string,
+    symbol: string,
+    rank: number,
+    is_new: boolean,
+    is_active: boolean,
+    type: string,
+}
 function Coins(){
-    return (
+    //coin state 생성 , type 을 지정 CoinInterface의 배열로 지정 
+    const [coins, setCoins] = useState<CoinInterface[]>([]);
+    const [loading, setLoading] = useState(true);
+    const getMoiveFetch = async() =>{
+        const response =  await fetch("https://api.coinpaprika.com/v1/coins");
+        const json = await response.json();
+        console.log(json);
+        setCoins(json.slice(0,100));
+    }
+    
+    useEffect(()=>{
+        getMoiveFetch();
+    }, []);
+        return (
         <Container>
             <Header>
             <Title>Coins</Title>
