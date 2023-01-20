@@ -2,35 +2,6 @@ import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {useState, useEffect} from "react";
 
-const coins = [ 
-    {
-        id: "btc-bitcoin",
-        name: "Bitcoin",
-        symbol: "BTC",
-        rank: 1,
-        is_new: false,
-        is_active: true,
-        type: "coin",
-        },
-        {
-        id: "eth-ethereum",
-        name: "Ethereum",
-        symbol: "ETH",
-        rank: 2,
-        is_new: false,
-        is_active: true,
-        type: "coin",
-        },
-        {
-        id: "hex-hex",
-        name: "HEX",
-        symbol: "HEX",
-        rank: 3,
-        is_new: false,
-        is_active: true,
-        type: "token",
-        },
-    ]
 interface CoinInterface { 
     id: string,
     name: string,
@@ -55,6 +26,7 @@ const CoinList = styled.ul``;
 const Coin = styled.li`
     background-color : white;
     color : ${props=> props.theme.bgColor};
+    text-align : center;
     border-radius : 10px;
     margin-bottom : 10px;
     padding : 20px;
@@ -71,8 +43,16 @@ const Coin = styled.li`
 `;
 const Title = styled.h1`
     font-size : 48px;
+    color: ${props=>props.theme.accentColor};
+`;
+const Loading = styled.span`
+    font-size : 20;
+    text-align : center;
+    display : block;
     color: ${props=>props.theme.accentColor}
 `;
+
+// type 결정 
 interface CoinInterface {
     id: string,
     name: string,
@@ -83,34 +63,38 @@ interface CoinInterface {
     type: string,
 }
 function Coins(){
-    //coin state 생성 , type 을 지정 CoinInterface의 배열로 지정 
+    //coin state 생성 , type 을 지정 CoinInterface의 배열로 지정  <CoinInterface[]>
     const [coins, setCoins] = useState<CoinInterface[]>([]);
+    // loading 중일 때 아닐 때 판단 
     const [loading, setLoading] = useState(true);
-    const getMoiveFetch = async() =>{
+    const getCoinFetch = async() =>{
         const response =  await fetch("https://api.coinpaprika.com/v1/coins");
         const json = await response.json();
-        console.log(json);
+        // array slice 배열 슬라이스 (0,100개 까지만)
         setCoins(json.slice(0,100));
+        setLoading(false);
     }
     
+    // 화면 열때 1회만 fetch 
     useEffect(()=>{
-        getMoiveFetch();
+        getCoinFetch();
     }, []);
         return (
         <Container>
             <Header>
             <Title>Coins</Title>
             </Header>
+            {loading? (<Loading>loading</Loading>) : 
+            (
             <CoinList>
                 {coins.map(coin =>(
                 <Coin key={coin.id}>
                     <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link> 
                 </Coin>
                 ))}
-               
             </CoinList>
+            )}
         </Container>
     );
- 
 }
 export default Coins;
