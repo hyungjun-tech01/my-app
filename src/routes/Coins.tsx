@@ -51,6 +51,11 @@ const Loading = styled.span`
     display : block;
     color: ${props=>props.theme.accentColor}
 `;
+const Img = styled.img`
+    width : 25px;
+    height : 25px;
+`;
+
 
 // type 결정 
 interface CoinInterface {
@@ -89,6 +94,7 @@ function Coins(){
             <CoinList>
                 {coins.map(coin =>(
                 <Coin key={coin.id}>
+                    <Img src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} />
                     <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link> 
                 </Coin>
                 ))}
