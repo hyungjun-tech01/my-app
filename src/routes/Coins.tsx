@@ -25,6 +25,7 @@ const Header = styled.header`
 const CoinList = styled.ul``;
 const Coin = styled.li`
     background-color : white;
+    display : flex;
     color : ${props=> props.theme.bgColor};
     text-align : center;
     border-radius : 10px;
@@ -32,7 +33,8 @@ const Coin = styled.li`
     padding : 20px;
     a {
         transition : color 0.4s ease-in;
-        display : block ; // 기존에는 화살표 까지만 클릭이 가능하였으나, 전체 블록을 클릭 가능
+        align-items : center;  // 이미지를 앵커 안에다가 넣어서 아이콘 클릭해도 돌아가게 
+        display : flex ; // 기존에는 화살표 까지만 클릭이 가능하였으나, 전체 블록을 클릭 가능
         padding : 20px; // 블록안으로 20pixel 안에서 부터 클릭 가능 
     }
     &:hover {
@@ -52,8 +54,9 @@ const Loading = styled.span`
     color: ${props=>props.theme.accentColor}
 `;
 const Img = styled.img`
-    width : 25px;
-    height : 25px;
+    width : 35px;
+    height : 35px;
+    margin-right : 10px;
 `;
 
 
@@ -94,8 +97,15 @@ function Coins(){
             <CoinList>
                 {coins.map(coin =>(
                 <Coin key={coin.id}>
-                    <Img src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} />
-                    <Link to={`/${coin.id}`}>{coin.name} &rarr;</Link> 
+                    <Link to={
+                        {
+                            pathname : `/${coin.id}`,
+                            state:{ name : coin.name},
+                        }
+                    }>
+                        <Img src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`} />
+                        {coin.name} &rarr;
+                    </Link> 
                 </Coin>
                 ))}
             </CoinList>
