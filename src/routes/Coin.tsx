@@ -40,20 +40,37 @@ function Coin(){
     const [info, setInfo] = useState({});
     const [priceInfo, setPriceInfo] = useState({});
 
-    
-    useEffect(()=>{
-        (async () => {
-            const infodata = 
-                await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();
-           
-            const pricedata = 
-            await (await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)).json();
-           
-            setInfo(infodata);
-            setPriceInfo(pricedata);
-            console.log(info);
+    const getCoinInfo = async() =>{
+        //const response =  await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`);
+        const json = await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();
+        // array slice 배열 슬라이스 (0,100개 까지만)
+        console.log(json);
 
-        } )()
+    }
+
+    useEffect(()=>{
+        (async() =>{
+            //const json = await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();
+            const infodata = await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();     
+            console.log("infodata", infodata);
+            const pricedata = await (await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)).json();
+            setInfo(infodata);
+
+            console.log("info", info);
+    
+        })()
+
+        //(async () => {
+            //const infodata = await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();
+            //console.log("infodata", infodata);
+
+          //  const pricedata = await (await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)).json();
+           
+            //setInfo(infodata);
+          //  setPriceInfo(pricedata);
+           
+
+       // } )()
     }, []);
 
     return (
