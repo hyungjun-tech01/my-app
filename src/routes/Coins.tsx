@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {useState, useEffect} from "react";
-
+import {useQuery} from "react-query";
+import {fetchCoins} from "../api"
 interface CoinInterface { 
     id: string,
     name: string,
@@ -71,6 +72,9 @@ interface CoinInterface {
     type: string,
 }
 function Coins(){
+    // {패치중에 false(다하고나면 true), 페치 데이터 }userQuery(유니크 키, fecherfuction)
+    const {isLoading, data} = useQuery<CoinInterface[]>("allCoins", fetchCoins);
+
     //coin state 생성 , type 을 지정 CoinInterface의 배열로 지정  <CoinInterface[]>
     const [coins, setCoins] = useState<CoinInterface[]>([]);
     // loading 중일 때 아닐 때 판단 
@@ -87,6 +91,7 @@ function Coins(){
     useEffect(()=>{
         getCoinFetch();
     }, []);
+
         return (
         <Container>
             <Header>

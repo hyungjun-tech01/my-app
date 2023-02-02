@@ -1,7 +1,10 @@
-import {useParams, useLocation} from "react-router";
+import {useParams, useLocation, useRouteMatch} from "react-router";
 import {useState, useEffect} from "react";
 import styled from "styled-components";
-import { Switch, Route} from "react-router-dom";
+import { Switch, Route, Link} from "react-router-dom";
+import {useQuery} from "react-query";
+import Price from "./Price";
+import Chart from "./Chart";
 
 const Container = styled.div`
     padding : 0px 20px ;
@@ -45,6 +48,25 @@ const OverviewItem = styled.div`
 const Description = styled.p`
   margin: 20px 0px;
 `;
+
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 25px 0px;
+  gap: 10px;
+`;
+
+const Tab = styled.span<{isActive:boolean}>`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 7px 0px;
+  border-radius: 10px;
+  color : ${props => props.isActive ? props.theme.accentColor : props.theme.textColor}
+ `;
+
 //useParams에 type 설정 -> RouteParams : -> inteface 
 //useParams는 url에서 중요한 정보를 잡아 낼 때 사용 
 // /:coinId 로 url을 호출함.
@@ -94,20 +116,23 @@ interface PriceData{
     
 }
 function Coin(){
+
     const [loading, setLoading] = useState(true);
     const {coinId} = useParams<RouteParams>();
     const {state} = useLocation<RouteState>();
     const [info, setInfo] = useState<InfoData>();
     const [priceInfo, setPriceInfo] = useState<PriceData>();
+    //useRouteMatch : 현재 url이 맞으면 true 안맞으면 null
+    const priceMatch = useRouteMatch("/:coinId/price");
+    const chartMatch = useRouteMatch("/:coinId/chart");
 
     const getCoinInfo = async() =>{
         //const response =  await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`);
         const json = await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();
         // array slice 배열 슬라이스 (0,100개 까지만)
-        console.log(json);
 
     }
-
+    // useEffect [] 를 [coinId] 변경 (warning 같은게 난다는 데 안 안난다. ) -> coinId변경시에 다시 함수 적용 
     useEffect(()=>{
         (async() =>{
             //const json = await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();
@@ -125,6 +150,8 @@ function Coin(){
     // {state?.name ? state.name : loading ? "Loading" : info?.name}
     // state에 name 이 있으면 state.name을 쓰고, 그렇지 않으면 loading 을 보여주는 데 loading 은 bool 이므로 
     //loading이 ture 이면 "Loading 으로 ", 그렇지 않으면 info.name으로 
+
+   //  ${coinId -> :coinId
     return (
     <Container>
         <Header>
@@ -158,7 +185,24 @@ function Coin(){
                     <span>Max Supply:</span>
                     <span>{priceInfo?.max_supply}</span>
                 </OverviewItem>
-            </Overview>       
+            </Overview>   
+            <Tabs>
+                <Tab isActive={priceMatch !== null}>
+                <Link to={`/${coinId}/price`}> Price </Link>
+                </Tab>
+                <Tab isActive={chartMatch !== null}>
+                    <Link to={`/${coinId}/chart`}>Chart</Link>    
+                </Tab>
+            </Tabs>    
+            <Switch>
+                <Route path={`/${coinId}/price`}>
+                    <Price />
+                </Route>
+                <Route path ={`/${coinId}/chart`}>
+                    <Chart />
+                </Route>
+
+            </Switch>
             </>
         )
           
