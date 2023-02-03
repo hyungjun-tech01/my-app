@@ -72,35 +72,36 @@ interface CoinInterface {
     type: string,
 }
 function Coins(){
-    // {패치중에 false(다하고나면 true), 페치 데이터 }userQuery(유니크 키, fecherfuction)
+    // {패치중에 false(다하고나면 true), 페치 데이터 }userQuery(유니크 identifier, fecherfuction)
     const {isLoading, data} = useQuery<CoinInterface[]>("allCoins", fetchCoins);
 
     //coin state 생성 , type 을 지정 CoinInterface의 배열로 지정  <CoinInterface[]>
-    const [coins, setCoins] = useState<CoinInterface[]>([]);
+    //const [coins, setCoins] = useState<CoinInterface[]>([]);
     // loading 중일 때 아닐 때 판단 
-    const [loading, setLoading] = useState(true);
-    const getCoinFetch = async() =>{
-        const response =  await fetch("https://api.coinpaprika.com/v1/coins");
-        const json = await response.json();
-        // array slice 배열 슬라이스 (0,100개 까지만)
-        setCoins(json.slice(0,100));
-        setLoading(false);
-    }
+    //const [loading, setLoading] = useState(true);
+    //const getCoinFetch = async() =>{
+    //    const response =  await fetch("https://api.coinpaprika.com/v1/coins");
+    //    const json = await response.json();
+    //    // array slice 배열 슬라이스 (0,100개 까지만)
+    //    setCoins(json.slice(0,100));
+    //    setLoading(false);
+    // }
     
     // 화면 열때 1회만 fetch 
-    useEffect(()=>{
-        getCoinFetch();
-    }, []);
+    //useEffect(()=>{
+    //    getCoinFetch();
+    //}, []);
 
+    //data? 없으면 에러 남. undefined 될수 있다고 ... 
         return (
         <Container>
             <Header>
             <Title>Coins</Title>
             </Header>
-            {loading? (<Loading>loading</Loading>) : 
+            {isLoading? (<Loading>loading</Loading>) : 
             (
             <CoinList>
-                {coins.map(coin =>(
+                {data?.slice(0,10).map(coin =>(
                 <Coin key={coin.id}>
                     <Link to={
                         {

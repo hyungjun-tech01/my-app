@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import Circle from './Circle';
+//import React, {useState} from 'react';
+//import Circle from './Circle';
 import styled, {createGlobalStyle} from 'styled-components';
 import Router from "./Router";
 
@@ -67,12 +67,12 @@ table {
 }
 `;
 
-const Container = styled.div`
-  background-color : ${prop => prop.theme.bgColor};  
-`;
-const H1 = styled.h1`
-  color : ${prop=>prop.theme.textColor}
-`;
+//const Container = styled.div`
+//  background-color : ${prop => prop.theme.bgColor};  
+//`;
+//const H1 = styled.h1`
+//  color : ${prop=>prop.theme.textColor}
+//`;
 // <> </> 이게 뭐지 ? fragment ?? 
 function App() {
   return (
