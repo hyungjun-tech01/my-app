@@ -2,6 +2,7 @@
 //import Circle from './Circle';
 import styled, {createGlobalStyle} from 'styled-components';
 import Router from "./Router";
+import {ReactQueryDevtools} from 'react-query/devtools';
 
 // reset style 
 const GlobalStyle = createGlobalStyle`
@@ -79,6 +80,7 @@ function App() {
     <>
       <GlobalStyle />
       <Router />
+      <ReactQueryDevtools initialIsOpen={true}/>
     </>
   );
 }

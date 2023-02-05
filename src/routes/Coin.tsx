@@ -5,6 +5,8 @@ import { Switch, Route, Link} from "react-router-dom";
 import {useQuery} from "react-query";
 import Price from "./Price";
 import Chart from "./Chart";
+import {fetchCoinInfo, fetchCoinTicker} from "../api"
+
 
 const Container = styled.div`
     padding : 0px 20px ;
@@ -117,45 +119,26 @@ interface PriceData{
 }
 function Coin(){
 
-    const [loading, setLoading] = useState(true);
+ 
     const {coinId} = useParams<RouteParams>();
     const {state} = useLocation<RouteState>();
-    const [info, setInfo] = useState<InfoData>();
-    const [priceInfo, setPriceInfo] = useState<PriceData>();
     //useRouteMatch : 현재 url이 맞으면 true 안맞으면 null
     const priceMatch = useRouteMatch("/:coinId/price");
     const chartMatch = useRouteMatch("/:coinId/chart");
 
-    const getCoinInfo = async() =>{
-        //const response =  await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`);
-        const json = await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();
-        // array slice 배열 슬라이스 (0,100개 까지만)
+    //useQuery의 키를 배열로 선언 - 항상 유니크해야 하기 때문에 , 각 코인별로 설정 되게 
+    // isLoading 도 두개, data도 두개가 안에 선언이 되었는데 
+    // 뒤에 사용할 때 왜 data를 사용 안하는지는 모르겠음 -> 그냥 infoData로 사용하니 문제없이 수행.
+    // fetchCoinInfo에 파라메터를 넘겨 줘야 하는데, ()=>fetchCoinInfo(coinId) 이렇게 넘겨 주고 있음
+    const {isLoading:infoLoading, data:infoData} = useQuery<InfoData>(["info",coinId], ()=>fetchCoinInfo(coinId));
+    const {isLoading:tickerLoading, data:tickerData} = useQuery<PriceData>(["tickers",coinId], ()=>fetchCoinTicker(coinId));
 
-    }
-    // useEffect [] 를 [coinId] 변경 (warning 같은게 난다는 데 안 안난다. ) -> coinId변경시에 다시 함수 적용 
-    useEffect(()=>{
-        (async() =>{
-            //const json = await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();
-            const infodata = await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();     
-            const pricedata = await (await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)).json();
-            console.log(infodata);
-            setInfo(infodata);
-            setPriceInfo(pricedata);
-           setLoading(false);
-    
-        })()
-
-    }, [coinId]);
-
-    // {state?.name ? state.name : loading ? "Loading" : info?.name}
-    // state에 name 이 있으면 state.name을 쓰고, 그렇지 않으면 loading 을 보여주는 데 loading 은 bool 이므로 
-    //loading이 ture 이면 "Loading 으로 ", 그렇지 않으면 info.name으로 
-
-   //  ${coinId -> :coinId
+ 
+   const loading = infoLoading||tickerLoading;
     return (
     <Container>
         <Header>
-           <Title> {state?.name ? state.name : loading ? "Loading" : info?.name}
+           <Title> {state?.name ? state.name : loading ? "Loading" : infoData?.name}
            </Title>
         </Header>
         {loading? (<Loading>loading</Loading>) : 
@@ -164,26 +147,26 @@ function Coin(){
             <Overview>
                 <OverviewItem>
                     <span>Rank:</span>
-                    <span>{info?.rank}</span>
+                    <span>{infoData?.rank}</span>
                 </OverviewItem>
                 <OverviewItem>
                     <span>Symbol:</span>
-                    <span>{info?.symbol}</span>
+                    <span>{infoData?.symbol}</span>
                 </OverviewItem>
                 <OverviewItem>
                     <span>Open Source:</span>
-                    <span>{info?.open_source ? "Yes" : "No"}</span>
+                    <span>{infoData?.open_source ? "Yes" : "No"}</span>
                 </OverviewItem>
             </Overview>
-            <Description> {info?.description}  </Description>
+            <Description> {infoData?.description}  </Description>
             <Overview>
                 <OverviewItem>
                     <span>Total Suply:</span>
-                    <span>{priceInfo?.total_supply}</span>
+                    <span>{tickerData?.total_supply}</span>
                 </OverviewItem>
                 <OverviewItem>
                     <span>Max Supply:</span>
-                    <span>{priceInfo?.max_supply}</span>
+                    <span>{tickerData?.max_supply}</span>
                 </OverviewItem>
             </Overview>   
             <Tabs>
@@ -199,7 +182,7 @@ function Coin(){
                     <Price />
                 </Route>
                 <Route path ={`/${coinId}/chart`}>
-                    <Chart />
+                    <Chart coinId={coinId}/>
                 </Route>
 
             </Switch>
