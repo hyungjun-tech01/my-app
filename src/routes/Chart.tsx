@@ -21,10 +21,19 @@ function Chart({coinId}:ChartProps){
     return <div>{isLoading? "Loading Chart... ":
     <ApexChart type="line" series={[
         {
-            name:"sales",
+            name:"price",
             data: data?.map((price) => Number(price.close)) as number[]
         }
-    ]} options={ {chart:{ height:500, width:500,}}}/>
+    ]} 
+    options=
+    { 
+        {
+            theme:{mode:"dark"},
+            chart:{ height:500, width:500, toolbar:{show:false}},
+            grid:{show:false},
+            stroke:{ curve:"smooth", width:3},
+        }
+    }/>
     }</div>;
 }
 export default Chart;
