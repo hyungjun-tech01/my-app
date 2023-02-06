@@ -6,6 +6,7 @@ import {useQuery} from "react-query";
 import Price from "./Price";
 import Chart from "./Chart";
 import {fetchCoinInfo, fetchCoinTicker} from "../api"
+import {Helmet} from "react-helmet";
 
 
 const Container = styled.div`
@@ -131,12 +132,15 @@ function Coin(){
     // 뒤에 사용할 때 왜 data를 사용 안하는지는 모르겠음 -> 그냥 infoData로 사용하니 문제없이 수행.
     // fetchCoinInfo에 파라메터를 넘겨 줘야 하는데, ()=>fetchCoinInfo(coinId) 이렇게 넘겨 주고 있음
     const {isLoading:infoLoading, data:infoData} = useQuery<InfoData>(["info",coinId], ()=>fetchCoinInfo(coinId));
-    const {isLoading:tickerLoading, data:tickerData} = useQuery<PriceData>(["tickers",coinId], ()=>fetchCoinTicker(coinId));
+    const {isLoading:tickerLoading, data:tickerData} = useQuery<PriceData>(["tickers",coinId], ()=>fetchCoinTicker(coinId),{refetchInterval:5000});
 
  
    const loading = infoLoading||tickerLoading;
     return (
     <Container>
+        <Helmet>
+             <title>{coinId}</title>
+        </Helmet>        
         <Header>
            <Title> {state?.name ? state.name : loading ? "Loading" : infoData?.name}
            </Title>
@@ -154,8 +158,8 @@ function Coin(){
                     <span>{infoData?.symbol}</span>
                 </OverviewItem>
                 <OverviewItem>
-                    <span>Open Source:</span>
-                    <span>{infoData?.open_source ? "Yes" : "No"}</span>
+                    <span>Price:</span>
+                    <span>{tickerData?.quotes.USD.ath_price.toFixed(3)}</span>
                 </OverviewItem>
             </Overview>
             <Description> {infoData?.description}  </Description>

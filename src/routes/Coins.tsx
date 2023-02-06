@@ -3,6 +3,8 @@ import {Link} from "react-router-dom";
 import {useState, useEffect} from "react";
 import {useQuery} from "react-query";
 import {fetchCoins} from "../api"
+import {Helmet} from "react-helmet";
+
 interface CoinInterface { 
     id: string,
     name: string,
@@ -95,6 +97,9 @@ function Coins(){
     //data? 없으면 에러 남. undefined 될수 있다고 ... 
         return (
         <Container>
+            <Helmet>
+                <title>Coins</title>
+            </Helmet>
             <Header>
             <Title>Coins</Title>
             </Header>

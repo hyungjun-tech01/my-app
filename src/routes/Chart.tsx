@@ -18,6 +18,8 @@ interface ChartProps{
 //Chart에서 Props 로 coinId를   보냄 
 function Chart({coinId}:ChartProps){
     const {isLoading, data} = useQuery<IData[]>(["ohlcv", coinId], ()=>fetchCoinHistory(coinId))
+    console.log( data?.map( (price) => price.time_close) );
+    console.log( data?.map( (price) => new Date(Number(price.time_close) )) );
     return <div>{isLoading? "Loading Chart... ":
     <ApexChart type="line" series={[
         {
@@ -32,6 +34,7 @@ function Chart({coinId}:ChartProps){
             chart:{ height:500, width:500, toolbar:{show:false}},
             grid:{show:false},
             stroke:{ curve:"smooth", width:3},
+            xaxis:{ labels:{show:false}, axisTicks:{show:false}, categories: data?.map( (price) => new Date(Number(price.time_close) ))  }
         }
     }/>
     }</div>;
