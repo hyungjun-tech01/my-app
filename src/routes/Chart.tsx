@@ -14,9 +14,10 @@ interface IData {
 }
 interface ChartProps{
     coinId: string;
+    isDark: boolean;
 }
 //Chart에서 Props 로 coinId를   보냄 
-function Chart({coinId}:ChartProps){
+function Chart({coinId, isDark}:ChartProps){
     const {isLoading, data} = useQuery<IData[]>(["ohlcv", coinId], ()=>fetchCoinHistory(coinId))
     console.log( data?.map( (price) => price.time_close) );
     console.log( data?.map( (price) => new Date(Number(price.time_close) )) );
@@ -30,7 +31,7 @@ function Chart({coinId}:ChartProps){
     options=
     { 
         {
-            theme:{mode:"dark"},
+            theme:{mode: isDark ? "dark":"light"},
             chart:{ height:500, width:500, toolbar:{show:false}},
             grid:{show:false},
             stroke:{ curve:"smooth", width:3},

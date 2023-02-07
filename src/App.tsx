@@ -1,8 +1,9 @@
-//import React, {useState} from 'react';
 //import Circle from './Circle';
-import styled, {createGlobalStyle} from 'styled-components';
+import { useState } from 'react';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import Router from "./Router";
-import {ReactQueryDevtools} from 'react-query/devtools';
+import { darkTheme, lightTheme } from './theme';
 
 // reset style 
 const GlobalStyle = createGlobalStyle`
@@ -76,13 +77,18 @@ table {
 //`;
 // <> </> 이게 뭐지 ? fragment ?? 
 function App() {
+  const [isDark, setIsDark] = useState(false);
+  const toggleDark = ()=> setIsDark(current => !current);
   return (
     <>
-      <GlobalStyle />
-      <Router />
-      <ReactQueryDevtools initialIsOpen={true}/>
+     <ThemeProvider theme = {isDark?darkTheme:lightTheme}>
+        <GlobalStyle />
+        <Router toggleDark={toggleDark} isDark={isDark} />
+        <ReactQueryDevtools initialIsOpen={true}/>
+      </ThemeProvider>
     </>
   );
 }
 
 export default App;
+

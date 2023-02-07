@@ -73,7 +73,10 @@ interface CoinInterface {
     is_active: boolean,
     type: string,
 }
-function Coins(){
+interface ICoinsPorps {
+    toggleDark: ()=>void;
+}
+function Coins({toggleDark}:ICoinsPorps){
     // {패치중에 false(다하고나면 true), 페치 데이터 }useQuery(유니크 identifier, fecherfuction)
     const {isLoading, data} = useQuery<CoinInterface[]>("allCoins", fetchCoins);
 
@@ -101,7 +104,7 @@ function Coins(){
                 <title>Coins</title>
             </Helmet>
             <Header>
-            <Title>Coins</Title>
+            <Title>Coins</Title> <button onClick={toggleDark}>Toggle</button>
             </Header>
             {isLoading? (<Loading>loading</Loading>) : 
             (
