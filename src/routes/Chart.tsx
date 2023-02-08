@@ -19,8 +19,8 @@ interface ChartProps{
 //Chart에서 Props 로 coinId를   보냄 
 function Chart({coinId, isDark}:ChartProps){
     const {isLoading, data} = useQuery<IData[]>(["ohlcv", coinId], ()=>fetchCoinHistory(coinId))
-    console.log( data?.map( (price) => price.time_close) );
-    console.log( data?.map( (price) => new Date(Number(price.time_close) )) );
+    console.log( isDark );
+
     return <div>{isLoading? "Loading Chart... ":
     <ApexChart type="line" series={[
         {
