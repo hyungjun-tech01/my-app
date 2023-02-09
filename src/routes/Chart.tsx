@@ -1,7 +1,10 @@
 import { string } from "yargs";
 import {useQuery} from "react-query";
-import {fetchCoinHistory} from "../api"
-import ApexChart from "react-apexcharts"
+import {fetchCoinHistory} from "../api";
+import ApexChart from "react-apexcharts";
+import {useRecoilValue} from "recoil";
+import { isDarkAtom } from '../atom';
+
 interface IData {
     time_open:string,
     time_close:string,
@@ -14,13 +17,12 @@ interface IData {
 }
 interface ChartProps{
     coinId: string;
-    isDark: boolean;
 }
 //Chart에서 Props 로 coinId를   보냄 
-function Chart({coinId, isDark}:ChartProps){
+function Chart({coinId}:ChartProps){
+    const atomIsDark = useRecoilValue(isDarkAtom);
     const {isLoading, data} = useQuery<IData[]>(["ohlcv", coinId], ()=>fetchCoinHistory(coinId))
-    console.log( isDark );
-
+    
     return <div>{isLoading? "Loading Chart... ":
     <ApexChart type="line" series={[
         {
@@ -31,7 +33,7 @@ function Chart({coinId, isDark}:ChartProps){
     options=
     { 
         {
-            theme:{mode: isDark ? "dark":"light"},
+            theme:{mode: atomIsDark ? "dark":"light"},
             chart:{ height:500, width:500, toolbar:{show:false}},
             grid:{show:false},
             stroke:{ curve:"smooth", width:3},
@@ -41,3 +43,4 @@ function Chart({coinId, isDark}:ChartProps){
     }</div>;
 }
 export default Chart;
+

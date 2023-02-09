@@ -4,6 +4,8 @@ import {useState, useEffect} from "react";
 import {useQuery} from "react-query";
 import {fetchCoins} from "../api"
 import {Helmet} from "react-helmet";
+import {useSetRecoilState} from "recoil";
+import { isDarkAtom } from '../atom';
 
 interface CoinInterface { 
     id: string,
@@ -74,9 +76,12 @@ interface CoinInterface {
     type: string,
 }
 interface ICoinsPorps {
-    toggleDark: ()=>void;
 }
-function Coins({toggleDark}:ICoinsPorps){
+function Coins({}:ICoinsPorps){
+    // atom set state 
+    const setDarkAtom = useSetRecoilState(isDarkAtom);
+    const toggleDarkAtom = ()=>setDarkAtom( prev => !prev);
+
     // {패치중에 false(다하고나면 true), 페치 데이터 }useQuery(유니크 identifier, fecherfuction)
     const {isLoading, data} = useQuery<CoinInterface[]>("allCoins", fetchCoins);
 
@@ -104,7 +109,7 @@ function Coins({toggleDark}:ICoinsPorps){
                 <title>Coins</title>
             </Helmet>
             <Header>
-            <Title>Coins</Title> <button onClick={toggleDark}>Toggle</button>
+            <Title>Coins</Title> <button onClick={toggleDarkAtom}>Toggle</button>
             </Header>
             {isLoading? (<Loading>loading</Loading>) : 
             (

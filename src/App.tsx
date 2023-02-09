@@ -4,7 +4,8 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import Router from "./Router";
 import { darkTheme, lightTheme } from './theme';
-
+import {useRecoilValue} from "recoil";
+import { isDarkAtom } from './atom';
 // reset style 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -77,13 +78,12 @@ table {
 //`;
 // <> </> 이게 뭐지 ? fragment ?? 
 function App() {
-  const [isDark, setIsDark] = useState(true);
-  const toggleDark = ()=> setIsDark(current => !current);
+  const atomIsDark = useRecoilValue(isDarkAtom);
   return (
     <>
-     <ThemeProvider theme = {isDark?darkTheme:lightTheme}>
+     <ThemeProvider theme = {atomIsDark?darkTheme:lightTheme}>
         <GlobalStyle />
-        <Router toggleDark={toggleDark} isDark={isDark} />
+        <Router />
         <ReactQueryDevtools initialIsOpen={true}/>
       </ThemeProvider>
     </>
