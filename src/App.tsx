@@ -2,10 +2,10 @@
 import { useState } from 'react';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import Router from "./Router";
 import { darkTheme, lightTheme } from './theme';
 import {useRecoilValue} from "recoil";
-import { isDarkAtom } from './atom';
+import ToDoList from "./ToDoList";
+
 // reset style 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -70,21 +70,13 @@ table {
 }
 `;
 
-//const Container = styled.div`
-//  background-color : ${prop => prop.theme.bgColor};  
-//`;
-//const H1 = styled.h1`
-//  color : ${prop=>prop.theme.textColor}
-//`;
-// <> </> 이게 뭐지 ? fragment ?? 
+
 function App() {
-  const atomIsDark = useRecoilValue(isDarkAtom);
   return (
     <>
-     <ThemeProvider theme = {atomIsDark?darkTheme:lightTheme}>
+     <ThemeProvider theme = {darkTheme}>
         <GlobalStyle />
-        <Router />
-        <ReactQueryDevtools initialIsOpen={true}/>
+        <ToDoList />
       </ThemeProvider>
     </>
   );
