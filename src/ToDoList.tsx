@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {useForm} from "react-hook-form";
 
 // function ToDoList(){
 //     input tag 안에 value 값이 들어오는 것을 감지 하고 써줌 .
@@ -34,10 +35,12 @@ import React, { useState } from "react";
 //     );
 // }
 function ToDoList(){
+    const {register} = useForm();
+    console.log(register("toDo"))
     return (
         <div>
             <form>
-                <input  placeholder = "write a to do"/>
+                <input  {...register("toDo")} placeholder = "write a to do"/>
                 <button>Add</button>
             </form>
         </div>
