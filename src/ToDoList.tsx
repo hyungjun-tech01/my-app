@@ -35,16 +35,35 @@ import {useForm} from "react-hook-form";
 //     );
 // }
 function ToDoList(){
-    const {register} = useForm();
-    console.log(register("toDo"))
+    //register : onchange value 등을 , onclur, onclick 등을 지원 
+    // watch : form안을 와칭할 수 있는 거. register - watch가 연결되어 있나?? 
+    const {register, handleSubmit, formState} = useForm();
+
+    const onValid = (data:any)=>{
+        console.log("data", data);
+    }
+    console.log(formState.errors);
+
+    // style 을 세로로
     return (
         <div>
-            <form>
-                <input  {...register("toDo")} placeholder = "write a to do"/>
+            <form style={{display:"flex", flexDirection:"column"}} onSubmit={handleSubmit(onValid)}>
+                <input  {...register("toDo", {required:"To do is required.", 
+                    minLength:{
+                        value: 10,
+                        message:"your todo is too short."
+                    }
+                })} placeholder = "write a to do"/>
+                <input  {...register("E-Mail", {
+                    required:"email is required." , 
+                    pattern: {
+                        value:/^[A-Za-z0-9._%+-]+@naver.com$/,
+                        message:"Only naver.com"
+                    } 
+                    })} placeholder = "E-Mail"/>
                 <button>Add</button>
             </form>
         </div>
-    
     );    
 }
 export default ToDoList;
