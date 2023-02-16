@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import {useForm} from "react-hook-form";
 
+interface IFormData{
+    [key: string]: string;
+}
 // function ToDoList(){
 //     input tag 안에 value 값이 들어오는 것을 감지 하고 써줌 .
 //     event:React.FormEvent<HTMLInputElement> 를 써줌 (이걸 어떻게 알지?? ) 
@@ -37,12 +40,12 @@ import {useForm} from "react-hook-form";
 function ToDoList(){
     //register : onchange value 등을 , onclur, onclick 등을 지원 
     // watch : form안을 와칭할 수 있는 거. register - watch가 연결되어 있나?? 
-    const {register, handleSubmit, formState} = useForm();
+    const {register, handleSubmit, formState:{errors}} = useForm<IFormData>();
 
     const onValid = (data:any)=>{
         console.log("data", data);
     }
-    console.log(formState.errors);
+    console.log(errors);
 
     // style 을 세로로
     return (
@@ -54,13 +57,23 @@ function ToDoList(){
                         message:"your todo is too short."
                     }
                 })} placeholder = "write a to do"/>
-                <input  {...register("E-Mail", {
+                <span>
+                    {
+                        errors?.toDo?.message
+                    }
+                </span>
+                <input  {...register("email", {
                     required:"email is required." , 
                     pattern: {
                         value:/^[A-Za-z0-9._%+-]+@naver.com$/,
                         message:"Only naver.com"
                     } 
                     })} placeholder = "E-Mail"/>
+                <span>
+                    {
+                        errors?.email?.message
+                    }
+                </span>
                 <button>Add</button>
             </form>
         </div>
