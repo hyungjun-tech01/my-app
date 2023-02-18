@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import {useForm} from "react-hook-form";
 
-interface IFormData{
-    [key: string]: string;
-}
 // function ToDoList(){
 //     input tag 안에 value 값이 들어오는 것을 감지 하고 써줌 .
 //     event:React.FormEvent<HTMLInputElement> 를 써줌 (이걸 어떻게 알지?? ) 
@@ -37,12 +34,26 @@ interface IFormData{
 
 //     );
 // }
+interface IForm{
+    toDo:string,
+    email:string,
+    password1:string,
+    password2:string,
+}
 function ToDoList(){
     //register : onchange value 등을 , onclur, onclick 등을 지원 
-    // watch : form안을 와칭할 수 있는 거. register - watch가 연결되어 있나?? 
-    const {register, handleSubmit, formState:{errors}} = useForm<IFormData>();
+    const {register, handleSubmit, formState:{errors}, setError} = useForm<IForm>();
 
-    const onValid = (data:any)=>{
+    //onValid엣 사용자 정의 message 추가 
+    const onValid = (data:IForm)=>{
+        // if password1 과 password2가 같지 않을때 
+        if( data.password1 !== data.password2){
+            setError(
+                "password2",
+                {message:"Password are not the same"},
+                {shouldFocus: true},
+            );
+        }
         console.log("data", data);
     }
     console.log(errors);
@@ -66,7 +77,7 @@ function ToDoList(){
                     required:"email is required." , 
                     pattern: {
                         value:/^[A-Za-z0-9._%+-]+@naver.com$/,
-                        message:"Only naver.com"
+                        message:"Only naver.com emails allowed"
                     } 
                     })} placeholder = "E-Mail"/>
                 <span>
@@ -74,6 +85,20 @@ function ToDoList(){
                         errors?.email?.message
                     }
                 </span>
+                <input  {...register("password1", {required:"To do is required.", 
+                    minLength:{
+                        value: 5,
+                        message:"your password is too short."
+                    }
+                })} placeholder = "write a to do"/>
+                <span> {errors?.password1?.message}</span>                
+                <input  {...register("password2", {required:"To do is required.", 
+                    minLength:{
+                        value: 5,
+                        message:"your password is too short."
+                    }
+                })} placeholder = "write a to do"/>                   
+                <span> {errors?.password2?.message}</span>                             
                 <button>Add</button>
             </form>
         </div>
