@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { darkTheme, lightTheme } from './theme';
-import {useRecoilValue} from "recoil";
 import ToDoList from "./ToDoList";
 
 // reset style 
