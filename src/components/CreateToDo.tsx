@@ -1,6 +1,6 @@
 import {useForm} from "react-hook-form";
-import {useSetRecoilState} from "recoil";
-import {toDoState} from "./atoms";
+import {useSetRecoilState, useRecoilValue} from "recoil";
+import {toDoState, categoryState, IToDo} from "./atoms";
 
 interface IForm{
     toDo:string,
@@ -8,10 +8,13 @@ interface IForm{
 function CreateToDo(){
     const {register, handleSubmit, formState:{errors}, setValue} = useForm<IForm>();
     const setToDos = useSetRecoilState(toDoState);
+    const acategory = useRecoilValue(categoryState); 
     //onValid엣 사용자 정의 message 추가 
     const onValid = (data:IForm)=>{
-        console.log("data", data.toDo);
-        setToDos(oldToDos => [{text:data.toDo, id:Date.now(), category:"TO_DO"}, ...oldToDos]);
+        console.log("data", acategory);
+        // categoryState 에 제한값을 주지 않으면 계속 에러 발생 
+        const todododo = {text:data.toDo, id:Date.now(), category:acategory as any};
+        setToDos(oldToDos => [{text:data.toDo, id:Date.now(), category:acategory}, ...oldToDos]);
         setValue("toDo","");
     }    
     return (
