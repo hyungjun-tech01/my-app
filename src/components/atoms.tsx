@@ -48,4 +48,10 @@ export const hourSelector = selector({
         const minute = get(minuteState);  // atom내에서 다른 atom을 가지고 올때?? 
         return minute / 60;
     },
+    //selector 에서 set ?? 
+    set:({set}, newValue)=>{
+        const minute = Number(newValue) * 60;
+        set(minuteState, minute);
+
+    }
 });
