@@ -33,3 +33,19 @@ export const toDoSelector = selector({
         return [toDos.filter((toDo)=> toDo.category === category)];
     },
 });
+
+export const minuteState = atom (
+    {
+        key:"minute",
+        default:0,
+    }
+);
+
+// selector 
+export const hourSelector = selector({
+    key:"hours",
+    get:({get}) => {
+        const minute = get(minuteState);  // atom내에서 다른 atom을 가지고 올때?? 
+        return minute / 60;
+    },
+});

@@ -4,6 +4,7 @@ import {useRecoilValue, useRecoilState} from "recoil";
 import CreateToDo from "./components/CreateToDo";
 import { toDoState, toDoSelector, categoryState , ToDoOptions} from "./components/atoms";
 import ToDo from "./components/ToDo";
+import TranslateHours from "./components/TranslateHours";
 
 function ToDoList(){
     const [toDo] = useRecoilValue(toDoSelector);
@@ -29,6 +30,9 @@ function ToDoList(){
                 {toDo.map(toDo=> 
                     <ToDo key={toDo.id} {...toDo} />) }
             </ul>
+            <hr/>
+            <h1> Minuite to Hours</h1>
+            <TranslateHours/>
         </div>
     );    
 }
