@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { QueryClient , QueryClientProvider} from 'react-query';
 import App from './App';
+import AppDnd from "./AppDnd";
 import {RecoilRoot} from "recoil";
 
 
@@ -14,7 +15,7 @@ root.render(
   <React.StrictMode>
     <RecoilRoot>
     <QueryClientProvider client = {queryClient} >
-        <App />
+        <AppDnd />
       </QueryClientProvider>
     </RecoilRoot>
   </React.StrictMode>
