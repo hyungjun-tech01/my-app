@@ -4,103 +4,64 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { darkTheme, lightTheme } from './theme';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
-
-// reset style 
-const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, menu, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-main, menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
-footer, header, hgroup, main, menu, nav, section {
-  display: block;
-}
-/* HTML5 hidden-attribute fix for newer browsers */
-*[hidden] {
-    display: none;
-}
-* {
-  box-sizing : border-box;
-}
-// font family Source sans pro 적영
-body {
-  font-family: 'Source Sans Pro', sans-serif;
-  background-color : ${prop => prop.theme.bgColor};
-  color : ${prop => prop.theme.textColor};
-  
-}
-// a tag에 밑줄 하지 않게 
-a {
-  text-decoration : none;
-  color : inherit;
-}
-menu, ol, ul {
-  list-style: none;
-}
-blockquote, q {
-  quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-  content: '';
-  content: none;
-}
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-`;
+import styled from "styled-components";
 
 // npm i react-beautiful-dnd
 // npm i --save-dev @types/react-beautiful-dnd
+const Wrapper = styled.div`
+  display : flex;
+  max-width : 480px;
+  margin : 0 auto;
+  justify-content : center;
+  align-items : center;
+  height : 100vh;
+`;
 
+const Boards = styled.div`
+  display : grid;
+  width : 100%;
+  grid-template-columns : repeat(3, 1fr);
+`;
+const Board = styled.div`
+  padding : 20px 10px;
+  padding-top:30px;
+  background-color : ${(props)=>props.theme.boardColor};  
+  border-radius : 5px;
+  min-height: 200px;
+`;
+const Card = styled.div`
+  background-color : ${(props)=> props.theme.cardColor};
+  padding : 10px 10px;
+  border-radius : 5px;
+  margin-bottom : 5px;
+`;
+
+const toDos = ["a", "b", "c", "d", "e", "f"];
 function AppDnd() {
   const onDragEnd = ()=>{};
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div>
+      <Wrapper>
+        <Boards>
         <Droppable droppableId="one">
           {(magic)=>(
-            <ul ref={magic.innerRef} {...magic.droppableProps} >
-              <Draggable draggableId="first" index={0}>
+            <Board ref={magic.innerRef} {...magic.droppableProps} >
+              {toDos.map( (toDo, index)=> (
+                <Draggable draggableId={toDo} index={index}>
                 { (magic)=> (
-                  <li ref={magic.innerRef} {...magic.draggableProps} >
-                    <span {...magic.dragHandleProps}>a</span>
-                     One 
-                  </li>
+                  <Card ref={magic.innerRef} {...magic.draggableProps} {...magic.dragHandleProps} >
+                    {toDo} 
+                  </Card>
                 )}
               </Draggable>
-              <Draggable draggableId="second" index={1}>
-                { (magic)=> (
-                  <li ref={magic.innerRef} {...magic.draggableProps} >
-                    <span {...magic.dragHandleProps}>a</span>
-                    Two
-                  </li>
-                  )}
-              </Draggable>
-            </ul>
+              ))
+              }
+              {magic.placeholder}
+            </Board>
           )}
         </Droppable>
-
-      </div>
+      </Boards>
+      </Wrapper>
     </DragDropContext>
   );
 }
