@@ -55,3 +55,8 @@ export const hourSelector = selector({
 
     }
 });
+
+export const  dndToDoState = atom ({
+    key:"dndToDo",
+    default:["a", "b","c","d","e","f",],
+});

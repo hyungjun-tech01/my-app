@@ -5,6 +5,8 @@ import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { darkTheme, lightTheme } from './theme';
 import {DragDropContext, Droppable, Draggable} from "react-beautiful-dnd";
 import styled from "styled-components";
+import {useRecoilState} from "recoil";
+import {dndToDoState} from "./components/atoms";
 
 // npm i react-beautiful-dnd
 // npm i --save-dev @types/react-beautiful-dnd
@@ -36,8 +38,9 @@ const Card = styled.div`
   margin-bottom : 5px;
 `;
 
-const toDos = ["a", "b", "c", "d", "e", "f"];
+//const toDos = ["a", "b", "c", "d", "e", "f"];
 function AppDnd() {
+  const [toDos, settoDos] = useRecoilState(dndToDoState);
   const onDragEnd = ()=>{};
   return (
     <DragDropContext onDragEnd={onDragEnd}>
