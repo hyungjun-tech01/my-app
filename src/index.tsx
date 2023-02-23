@@ -74,11 +74,13 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 const queryClient = new QueryClient();
-//   <React.StrictMode>     <RecoilRoot>     </RecoilRoot> </React.StrictMode>
+//   <React.StrictMode>          </React.StrictMode>
 root.render(
   <ThemeProvider theme={darkTheme}>
-    <GlobalStyle />
+    <RecoilRoot> 
+        <GlobalStyle />
         <AppDnd />
+    </RecoilRoot>
   </ThemeProvider>
 
 );
