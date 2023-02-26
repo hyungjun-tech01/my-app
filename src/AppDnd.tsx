@@ -31,18 +31,23 @@ const Boards = styled.div`
 
 function AppDnd() {
   const [toDos, setToDos] = useRecoilState(dndToDoState);
-  const onDragEnd = ({draggableId, destination, source}:DropResult)=>{
-    if(!destination) return;
-
-//    setToDos(oldToDos => {
-//      const copyToDos = [...oldToDos];
-//      // delet 
-//      copyToDos.splice(source.index, 1);
-//      //if(destination?.draggableId) {}
-//      copyToDos.splice(destination?.index, 0, draggableId);
-//      return copyToDos;
-//    });
-    
+  const onDragEnd = (info:DropResult)=>{
+      console.log(info);
+      const {draggableId, destination, source} = info;
+      if(destination?.droppableId === source.droppableId){
+        //we are same board
+       setToDos(allBoard => {
+         const copyToDos = [...allBoard[source.droppableId]];
+         // delet 
+         copyToDos.splice(source.index, 1);
+         //if(destination?.draggableId) {}
+         copyToDos.splice(destination?.index, 0, draggableId);
+         return {
+           ...allBoard,
+           [source.droppableId]:copyToDos,
+         }
+        });
+      }
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>

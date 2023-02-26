@@ -63,9 +63,9 @@ export const  dndToDoState = atom <IToDoSate>(
     {
         key:"dndToDo",
         default:{
-            to_do : ["a", "b",],
-            doing : ["c","d"],
-            done : ["e","f",],
+            "To Do" : ["a", "b",],
+            "Doing" : ["c","d"],
+            "Done" : ["e","f",],
         },
     }
 );
