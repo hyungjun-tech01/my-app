@@ -3,6 +3,8 @@ import styled from "styled-components";
 import DraggableCard from "./DraggableCard";
 import {useForm} from "react-hook-form";
 import IDndToDo from "./atoms";
+import useSetRecoilState from "recoil";
+import dndToDoState from "./atoms";
 
 const Wrapper = styled.div`
   padding : 00px 10px;
@@ -41,21 +43,31 @@ interface IBoardProps{
     boardId:string;
 }
 interface IForm{
-  aaaa : string;
+  toDo : string;
 };
 
 function Board({toDos, boardId}:IBoardProps){
+    const setToDos = useSetRecoilState(dndToDoState);
     const {register, setValue, handleSubmit} = useForm<IForm>();
-    const onValid = (data:IForm) => {
-      console.log(data);
-          setValue("aaaa", "");
+    const onValid = ({toDo}:IForm) => {
+      console.log(toDo);
+      const newToDo = {
+        id:Date.now(),
+        text : toDo,
+      };
+      setToDos( allBoards => {
+        return{
+          ...allBoards,
+        }
+      });
+      setValue("toDo", "");
     };
     return (
       <Wrapper>
         <Title>{boardId}</Title>
         <Form onSubmit={handleSubmit(onValid)}>
           <input 
-            {...register("aaaa", {required:true})} 
+            {...register("toDo", {required:true})} 
             type="text" 
             placeholder = {`add task on ${boardId}`}/>
         </Form>
