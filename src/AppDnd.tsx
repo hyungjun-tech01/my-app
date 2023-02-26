@@ -34,20 +34,42 @@ function AppDnd() {
   const onDragEnd = (info:DropResult)=>{
       console.log(info);
       const {draggableId, destination, source} = info;
-      if(destination?.droppableId === source.droppableId){
-        //we are same board
+      if(!destination) return;
+
+     if(destination?.droppableId === source.droppableId){
+       //we are same board
        setToDos(allBoard => {
-         const copyToDos = [...allBoard[source.droppableId]];
-         // delet 
-         copyToDos.splice(source.index, 1);
-         //if(destination?.draggableId) {}
-         copyToDos.splice(destination?.index, 0, draggableId);
-         return {
+       
+        const copyToDos = [...allBoard[source.droppableId]];
+        const taskObj = copyToDos[source.index];
+        // delet 
+        copyToDos.splice(source.index, 1);
+       
+        //if(destination?.draggableId) {}
+        copyToDos.splice(destination?.index, 0, taskObj);
+        
+        return {
+          ...allBoard,
+          [source.droppableId]:copyToDos,
+        }
+      });
+     }
+     if(destination.droppableId !== source.droppableId){
+       //cross board movement
+       setToDos( allBoard => {
+         const sourceBoard = [...allBoard[source.droppableId]];
+         const taskObj = sourceBoard[source.index];
+         const targetBoard = [...allBoard[destination.droppableId]];
+         
+         sourceBoard.splice(source.index, 1);
+         targetBoard.splice(destination.index, 0, taskObj)
+         return{
            ...allBoard,
-           [source.droppableId]:copyToDos,
+           [source.droppableId]:sourceBoard,
+           [destination.droppableId]:targetBoard,
          }
-        });
-      }
+       });
+     }
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>

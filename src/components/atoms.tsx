@@ -55,17 +55,20 @@ export const hourSelector = selector({
 
     }
 });
-
+export default interface IDnDToDo{
+    id:number;
+    text :string;
+};
 interface IToDoSate {
-    [key:string] : string[];
-}
+    [key:string] : IDnDToDo[];
+};
 export const  dndToDoState = atom <IToDoSate>(
     {
         key:"dndToDo",
         default:{
-            "To Do" : ["a", "b",],
-            "Doing" : ["c","d"],
-            "Done" : ["e","f",],
+            "To Do" : [{id:1, text:"hello"}, {id:2, text:"hello2"}],
+            "Doing" : [],
+            "Done" : [],
         },
     }
 );
