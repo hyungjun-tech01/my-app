@@ -2,11 +2,12 @@ import React from 'react';
 //import ReactDOM from "react-dom";
 import ReactDOM from 'react-dom/client';
 import { QueryClient , QueryClientProvider} from 'react-query';
-import App from './App';
-import AppDnd from "./AppDnd";
+//import App from './App';
+//import AppDnd from "./AppDnd";
 import {RecoilRoot} from "recoil";
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { darkTheme, lightTheme } from './theme';
+import AppAni from "./AppAni";
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -79,7 +80,7 @@ root.render(
   <ThemeProvider theme={darkTheme}>
     <RecoilRoot> 
         <GlobalStyle />
-        <AppDnd />
+        <AppAni />
     </RecoilRoot>
   </ThemeProvider>
 
