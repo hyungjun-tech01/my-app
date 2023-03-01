@@ -2,9 +2,8 @@ import {Droppable} from "react-beautiful-dnd";
 import styled from "styled-components";
 import DraggableCard from "./DraggableCard";
 import {useForm} from "react-hook-form";
-import IDndToDo from "./atoms";
-import useSetRecoilState from "recoil";
-import dndToDoState from "./atoms";
+import {IDnDToDo, dndToDoState} from "./atoms";
+import {useSetRecoilState} from "recoil";
 
 const Wrapper = styled.div`
   padding : 00px 10px;
@@ -39,7 +38,7 @@ const Form = styled.form`
 `;
 
 interface IBoardProps{
-    toDos:IDndToDo[],
+    toDos:IDnDToDo[],
     boardId:string;
 }
 interface IForm{
@@ -58,6 +57,7 @@ function Board({toDos, boardId}:IBoardProps){
       setToDos( allBoards => {
         return{
           ...allBoards,
+          [boardId] : [newToDo, ...allBoards[boardId]]
         }
       });
       setValue("toDo", "");

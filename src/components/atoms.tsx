@@ -55,11 +55,11 @@ export const hourSelector = selector({
 
     }
 });
-export default interface IDnDToDo{
+export interface IDnDToDo{
     id:number;
     text :string;
 };
-interface IToDoSate {
+export interface IToDoSate {
     [key:string] : IDnDToDo[];
 };
 export const  dndToDoState = atom <IToDoSate>(
