@@ -8,6 +8,8 @@ import {RecoilRoot} from "recoil";
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
 import { darkTheme, lightTheme } from './theme';
 import AppAni from "./AppAni";
+import AppPre from "./AppPre";
+
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
@@ -80,9 +82,8 @@ root.render(
   <ThemeProvider theme={darkTheme}>
     <RecoilRoot> 
         <GlobalStyle />
-        <AppAni />
+        <AppPre />
     </RecoilRoot>
   </ThemeProvider>
-
 );
 
