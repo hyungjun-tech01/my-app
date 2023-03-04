@@ -24,11 +24,11 @@ const Box = styled(motion.div)`
     box-shadow : 0 20px 3px rgba(0,0,0,0.1), 0 0px 20px 
 `;
 const boxVariants = {
-        initial:{
-            x:500,
+        initial:(back:boolean) => ({
+            x: back ? -500:500,
             opacity:0,
             scale:0,
-        },
+        }),
         visible:{
             x:0,
             opacity:1,
@@ -37,31 +37,34 @@ const boxVariants = {
                 duration:1,
             }            
         },
-        leaving:{
+        leaving:(back:boolean) => ({
             opacity:0,
             scale:0,
-            x:-500,
+            x: back ? 500:-500,
             rotateX:180,
             transition:{
                 duration:1,
             }
-        },
+        }),
 }
 function AppPre(){
     const [showing, setShowing] = useState(1);
+    const [back, setBack] = useState(false);
+
     const onClick = ()=>{
-       setShowing(prev => prev==10 ? 1:prev+1);
+        setBack(false);
+        setShowing(prev => prev==10 ? 1:prev+1);
     }
     const PrevPlease = ()=>{
+        setBack(true);
         setShowing(prev => prev==1 ? 10 : prev-1);
     }
     return(
         <Wrapper>
-            <AnimatePresence>
+            <AnimatePresence custom={back}>
                 {
-                    [1,2,3,4,5,6,7,8,9,10].map(i => i==showing ? 
-                    <Box variants={boxVariants} 
-                       initial="initial" animate="visible" exit="leaving" key={i}>{i}</Box>:null)
+                    <Box custom={back} variants={boxVariants} 
+                       initial="initial" animate="visible" exit="leaving" key={showing}>{showing}</Box>
                 }
             </AnimatePresence>
             <button onClick={onClick}>Next Me</button>
